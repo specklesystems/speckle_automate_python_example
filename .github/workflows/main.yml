@@ -32,6 +32,7 @@ jobs:
         run: |
           echo "function_input_schema=$(python schema_generation.py)" >> "$GITHUB_ENV"
       - uses: ./github-action
+        id: function_publish
         with:
           speckle_server_url: 'https://automate.speckle.dev'
           speckle_token: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_PUBLISH_TOKEN }}
@@ -51,3 +52,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          tags: automate.speckle.dev/${{ secrets.SPECKLE_AUTOMATE_FUNCTION_ID }}:${{ steps.function_publish.outputs.version_id }}
