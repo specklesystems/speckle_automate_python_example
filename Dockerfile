@@ -1,7 +1,7 @@
-FROM python:3.11
+FROM python:3.11-slim
 
-# RUN pip install poetry
+RUN pip install poetry
 
 COPY . .
-RUN pip install -r requirements.txt
+RUN poetry export -f requirements.txt --output requirements.txt && pip install -r requirements.txt
 # RUN poetry install --no-root --no-dev
