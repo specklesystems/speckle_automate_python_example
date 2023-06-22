@@ -25,7 +25,7 @@ jobs:
           virtualenvs-in-project: false
           installer-parallel: true
       - name: Restore dependencies
-        run: poetry install
+        run: poetry install --no-root
       - name: Extract functionInputSchema
         run: |
           echo "function_input_schema=$(python schema_generation.py)" >> "$GITHUB_ENV"
