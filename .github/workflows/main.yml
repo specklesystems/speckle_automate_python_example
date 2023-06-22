@@ -1,0 +1,34 @@
+name: 'build and deploy Speckle functions'
+on: # rebuild any PRs and any branch changes
+  pull_request:
+  push:
+    branches:
+
+jobs:
+  integration-test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v3
+        with:
+          repository: 'specklesystems/speckle-automate-github-action'
+          path: 'github-action'
+      - uses: ./github-action
+        description: 'publish the metadata about the function to Speckle Automate'
+        with:
+          speckle_server_url: 'https://automate.speckle.dev'
+          speckle_token: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_PUBLISH_TOKEN_FOR_GETTING_STARTED_TYPESCRIPT }}
+          speckle_function_id: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_ID_FOR_GETTING_STARTED_TYPESCRIPT }}
+          speckle_function_path: 'tasks/getting-started/typescript'
+      - name: Log in to Speckle Automate Docker registry
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          registry: 'https://automate.speckle.dev'
+          username: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_PUBLISH_TOKEN_FOR_GETTING_STARTED_TYPESCRIPT }}
+          password: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_PUBLISH_TOKEN_FOR_GETTING_STARTED_TYPESCRIPT }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./tasks/getting-started/typescript/Dockerfile
+          push: true
