@@ -14,6 +14,9 @@ jobs:
         with:
           repository: 'specklesystems/speckle-automate-github-action'
           path: 'github-action'
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' 
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
