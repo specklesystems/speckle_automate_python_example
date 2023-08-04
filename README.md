@@ -29,11 +29,15 @@ The comment is attributed to the user who registered the Function with Speckle A
 
 ## Developer Requirements
 
-
+1. Install the following:
+    - [Python 3](https://www.python.org/downloads/)
+    - [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
+1. Run `poetry install` to install the required Python packages.
 
 ## Building and Testing
 
-
+The code can be tested locally by running `poetry run pytest`.
+The code should also be packaged into the format required by Speckle Automate, a Docker Container Image, and that should also be tested.
 
 ## Resources
 
