@@ -1,23 +1,21 @@
 name: 'build and deploy Speckle functions'
-on: # rebuild any any `main` branch changes
+on:
   push:
     branches:
       - main
+    tags:
+      - '*'
 
 jobs:
   publish-automate-function-version: # make sure the action works on a clean machine without building
+    env:
+      FUNCTION_SCHEMA_FILE_NAME: functionSchema.json
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.4.0
-      - uses: actions/checkout@v3.4.0
-        with:
-          repository: 'specklesystems/speckle-automate-github-action'
-          path: 'github-action'
-          ref: main
-
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11' 
+          python-version: '3.11'
       - name: Install and configure Poetry
         uses: snok/install-poetry@v1
         with:
@@ -28,27 +26,14 @@ jobs:
       - name: Restore dependencies
         run: poetry install --no-root
       - name: Extract functionInputSchema
+        id: extract_schema
         run: |
-          echo "function_input_schema=$(python schema_generation.py)" >> "$GITHUB_ENV"
-      - uses: ./github-action
-        id: function_publish
+          echo $(python schema_generation.py) > ${HOME}/${{ env.FUNCTION_SCHEMA_FILE_NAME }}
+      - name: Speckle Automate Function - Build and Publish
+        uses: specklesystems/speckle-automate-github-composite-action@0.4.2
         with:
-          speckle_server_url: 'https://automate.speckle.dev'
+          speckle_automate_url: 'https://automate.speckle.dev'
           speckle_token: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_PUBLISH_TOKEN }}
           speckle_function_id: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_ID }}
-          speckle_function_input_schema: ${{ env.function_input_schema }}
+          speckle_function_input_schema_file_path: ${{ env.FUNCTION_SCHEMA_FILE_NAME }}
           speckle_function_command: 'python main.py'
-          speckle_function_path: '.'
-      - name: Log in to Speckle Automate Docker registry
-        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
-        with:
-          registry: 'https://automate.speckle.dev'
-          username: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_PUBLISH_TOKEN }}
-          password: ${{ secrets.SPECKLE_AUTOMATE_FUNCTION_PUBLISH_TOKEN }}
-      - name: Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: automate.speckle.dev/${{ secrets.SPECKLE_AUTOMATE_FUNCTION_ID }}:${{ steps.function_publish.outputs.version_id }}
