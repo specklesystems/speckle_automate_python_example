@@ -1,5 +1,5 @@
 import typer
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from stringcase import camelcase
 from specklepy.transports.memory import MemoryTransport
 from specklepy.transports.server import ServerTransport
@@ -19,8 +19,7 @@ class SpeckleProjectData(BaseModel):
     version_id: str
     speckle_server_url: str
 
-    class Config:
-        alias_generator = camelcase
+    model_config = ConfigDict(alias_generator=camelcase, protected_namespaces=())
 
 
 class FunctionInputs(BaseModel):
@@ -35,8 +34,8 @@ class FunctionInputs(BaseModel):
 
 
 def main(speckle_project_data: str, function_inputs: str, speckle_token: str):
-    project_data = SpeckleProjectData.parse_raw(speckle_project_data)
-    inputs = FunctionInputs.parse_raw(function_inputs)
+    project_data = SpeckleProjectData.model_validate_json(speckle_project_data)
+    inputs = FunctionInputs.model_validate_json(function_inputs)
 
     client = SpeckleClient(project_data.speckle_server_url, use_ssl=False)
     client.authenticate_with_token(speckle_token)
@@ -67,9 +66,4 @@ def main(speckle_project_data: str, function_inputs: str, speckle_token: str):
 
 
 if __name__ == "__main__":
-    # main(
-    #     '{"projectId":"bbb3aba8d4", "modelId":"automateTest", "versionId": "d37ee808db", "speckleServerUrl": "http://hyperion:3000" }',
-    #     '{"commentText": "automate made me to do this"}',
-    #     "c3e6536e570a94e5d84590c51b29198b26dce89439",
-    # )
     typer.run(main)

@@ -8,9 +8,9 @@ packages = [{include = "src/speckle_automate_py"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-specklepy = "^2.14.1"
+specklepy = "^2.16.0"
 typer = "^0.9.0"
-pydantic = "^1.10.8"
+pydantic = "^2.1.1"
 stringcase = "^1.2.0"
 
 [tool.poetry.group.dev.dependencies]
