@@ -41,5 +41,5 @@ def automate_function(
 
     print(
         f"Found {count} object that match the queried speckle type: ",
-        "{function_inputs.speckle_type_to_count}",
+        f"{function_inputs.speckle_type_to_count}",
     )
