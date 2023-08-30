@@ -1,12 +1,40 @@
-# Speckle Automate - Python Example
+# Speckle Automate function template - Python
+
+This is a template repository for a Speckle Automate functions written in python
+using the [specklepy](https://pypi.org/project/specklepy/) SDK to interact with Speckle data.
+
+This template contains the full scaffolding required to publish a function to the automate environment.
+Also has some sane defaults for a development environment setups.
+
+## Getting started
+
+1. Use this template repository to create a new repository in your own / organization's profile.
+
+Register the function 
+
+### Add new dependencies
+
+To add new python package dependencies to the project, use:
+`$ poetry add pandas`
+
+### Change launch variables
+
+describe how the launch.json should be edited
+
+### Github Codespaces
+
+create new repo from template, and use the create new code
+
+
+### Local dev environment
+
+
+
+
+# Archive
 
 This is a simple example of how to use the Speckle Automate Python package to automate the creation of a Speckle stream.
 
-## What this Speckle Function does
-
-This Speckle Function creates a new comment in a Speckle Model. The phrase used in the comment is configured when the Speckle Automation is created; the Speckle Automation links a Speckle Function to a Speckle Model.
-
-The comment is attributed to the user who registered the Function with Speckle Automate.
 
 ## Using this Speckle Function
 
@@ -32,7 +60,7 @@ The comment is attributed to the user who registered the Function with Speckle A
 1. Install the following:
     - [Python 3](https://www.python.org/downloads/)
     - [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
-1. Run `poetry install` to install the required Python packages.
+1. Run `poetry shell && poetry install` to install the required Python packages.
 
 ## Building and Testing
 

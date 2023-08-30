@@ -2,10 +2,18 @@ import typer
 import os
 from speckle_project_data import SpeckleProjectData
 from automate_function import FunctionInputs, automate_function
+from typing_extensions import Annotated
+from typing import Optional
 
 
-def main(speckle_project_data: str, function_inputs: str, speckle_token: str = ""):
-    speckle_token = speckle_token if speckle_token else os.environ.get("SPECKLE_TOKEN")
+def main(
+    speckle_project_data: str,
+    function_inputs: str,
+    speckle_token: Annotated[Optional[str], typer.Argument()] = None,
+):
+    speckle_token = (
+        speckle_token if speckle_token else os.environ.get("SPECKLE_TOKEN", None)
+    )
     if not speckle_token:
         raise ValueError("The supplied speckle token is not valid")
 
