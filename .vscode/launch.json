@@ -5,12 +5,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Current File",
+      "name": "Speckle Automate function",
       "type": "python",
       "request": "launch",
-      "program": "${file}",
+      "program": "main.py",
       "console": "integratedTerminal",
-      "justMyCode": false
-    }
+      "justMyCode": true,
+      "envFile": "${workspaceFolder}/.env",
+      "args": [
+        "{\"projectId\": \"843d07eb10\", \"modelId\": \"base design\", \"versionId\": \"2a32ccfee1\", \"speckleServerUrl\": \"https://latest.speckle.systems\"}",
+        // make sure to use camelCase for variable names
+        "{\"speckleTypeToCount\": \"Objects.Geometry.Brep\"}"
+      ],
+    },
   ]
 }

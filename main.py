@@ -1,68 +1,17 @@
 import typer
-from pydantic import BaseModel, ConfigDict
-from stringcase import camelcase
-from specklepy.transports.memory import MemoryTransport
-from specklepy.transports.server import ServerTransport
-from specklepy.api.operations import receive
-from specklepy.api.client import SpeckleClient
-import random
-
-from flatten import flatten_base
-from make_comment import make_comment
+import os
+from speckle_project_data import SpeckleProjectData
+from automate_function import FunctionInputs, automate_function
 
 
-class SpeckleProjectData(BaseModel):
-    """Values of the project / model that triggered the run of this function."""
+def main(speckle_project_data: str, function_inputs: str, speckle_token: str = ""):
+    speckle_token = speckle_token if speckle_token else os.environ.get("SPECKLE_TOKEN")
+    if not speckle_token:
+        raise ValueError("The supplied speckle token is not valid")
 
-    project_id: str
-    model_id: str
-    version_id: str
-    speckle_server_url: str
-
-    model_config = ConfigDict(alias_generator=camelcase, protected_namespaces=())
-
-
-class FunctionInputs(BaseModel):
-    """
-    These are function author defined values, automate will make sure to supply them.
-    """
-
-    comment_text: str
-
-    class Config:
-        alias_generator = camelcase
-
-
-def main(speckle_project_data: str, function_inputs: str, speckle_token: str):
     project_data = SpeckleProjectData.model_validate_json(speckle_project_data)
     inputs = FunctionInputs.model_validate_json(function_inputs)
-
-    client = SpeckleClient(project_data.speckle_server_url, use_ssl=False)
-    client.authenticate_with_token(speckle_token)
-    commit = client.commit.get(project_data.project_id, project_data.version_id)
-    branch = client.branch.get(project_data.project_id, project_data.model_id, 1)
-
-    memory_transport = MemoryTransport()
-    server_transport = ServerTransport(project_data.project_id, client)
-    base = receive(commit.referencedObject, server_transport, memory_transport)
-
-    random_beam = random.choice(
-        [b for b in flatten_base(base) if b.speckle_type == "IFCBEAM"]
-    )
-
-    make_comment(
-        client,
-        project_data.project_id,
-        branch.id,
-        project_data.version_id,
-        inputs.comment_text,
-        random_beam.id,
-    )
-
-    print(
-        "Ran function with",
-        f"{speckle_project_data} {function_inputs}",
-    )
+    automate_function(project_data, inputs, speckle_token)
 
 
 if __name__ == "__main__":
