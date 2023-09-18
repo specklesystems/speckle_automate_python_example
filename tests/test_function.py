@@ -11,7 +11,7 @@ from specklepy.api.client import SpeckleClient
 from specklepy.objects.base import Base
 from specklepy.transports.server import ServerTransport
 
-from automate_sdk import (
+from automation_context import (
     AutomationContext,
     AutomationRunData,
     AutomationStatus,

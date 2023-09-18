@@ -1,11 +1,8 @@
 """This module contains the business logic of the function.
 
-Make sure that this module exposes a `FunctionInputs` class
-and an `automate_function` function definition.
+use the automation_context module to wrap your function in an Autamate context helper
 """
-from specklepy.objects.geometry import Mesh
-
-from automate_sdk import (
+from automation_context import (
     AutomateBase,
     AutomationContext,
     execute_automate_function,
