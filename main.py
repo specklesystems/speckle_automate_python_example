@@ -3,6 +3,7 @@
 use the automation_context module to wrap your function in an Autamate context helper
 """
 
+from pydantic import Field
 from speckle_automate import (
     AutomateBase,
     AutomationContext,
@@ -20,7 +21,13 @@ class FunctionInputs(AutomateBase):
     ttps://docs.pydantic.dev/latest/usage/models/
     """
 
-    forbidden_speckle_type: str
+    forbidden_speckle_types: list[str] = Field(
+        title="Forbidden speckle types",
+        description=(
+            "If a object has any of the following speckle_types,"
+            " it will be marked with an error"
+        ),
+    )
 
 
 def automate_function(
@@ -41,13 +48,12 @@ def automate_function(
 
     count = 0
     for b in flatten_base(version_root_object):
-        if b.speckle_type == function_inputs.forbidden_speckle_type:
+        if b.speckle_type in function_inputs.forbidden_speckle_types:
             if not b.id:
                 raise ValueError("Cannot operate on objects without their id's.")
             automate_context.add_object_error(
                 b.id,
-                "This project should not contain the type: "
-                f"{function_inputs.forbidden_speckle_type}",
+                "This project should not contain the type: " f"{b.speckle_type}",
             )
             count += 1
 
@@ -55,8 +61,8 @@ def automate_function(
         # this is how a run is marked with a failure cause
         automate_context.mark_run_failed(
             "Automation failed: "
-            f"Found {count} object that have a forbidden speckle type: "
-            f"{function_inputs.forbidden_speckle_type}"
+            f"Found {count} object that have one of the forbidden speckle types: "
+            f"{', '.join(function_inputs.forbidden_speckle_types)}"
         )
 
     else:
