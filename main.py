@@ -21,13 +21,7 @@ class FunctionInputs(AutomateBase):
     ttps://docs.pydantic.dev/latest/usage/models/
     """
 
-    forbidden_speckle_type: list[str] = Field(
-        title="Forbidden speckle type",
-        description=(
-            "If a object has the following speckle_type,"
-            " it will be marked with an error."
-        ),
-    )
+    forbidden_speckle_type: list[str] = Field(title="Forbidden speckle type")
 
 
 def automate_function(
