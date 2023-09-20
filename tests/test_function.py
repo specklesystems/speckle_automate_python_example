@@ -6,17 +6,17 @@ from pathlib import Path
 
 import pytest
 from gql import gql
-from specklepy.api import operations
-from specklepy.api.client import SpeckleClient
-from specklepy.objects.base import Base
-from specklepy.transports.server import ServerTransport
-
-from automation_context import (
+from speckle_automate import (
     AutomationContext,
     AutomationRunData,
     AutomationStatus,
     run_function,
 )
+from specklepy.api import operations
+from specklepy.api.client import SpeckleClient
+from specklepy.objects.base import Base
+from specklepy.transports.server import ServerTransport
+
 from main import FunctionInputs, automate_function
 
 
@@ -158,16 +158,3 @@ def test_function_run(automation_run_data: AutomationRunData, speckle_token: str
     )
 
     assert automate_sdk.run_status == AutomationStatus.FAILED
-
-
-def test_file_uploads(automation_run_data: AutomationRunData, speckle_token: str):
-    """Test file store capabilities of the automate sdk."""
-    automate_context = AutomationContext.initialize(automation_run_data, speckle_token)
-
-    path = Path(f"./{crypto_random_string(10)}").resolve()
-    path.write_text("foobar")
-
-    automate_context.store_file_result(path)
-
-    os.remove(path)
-    assert len(automate_context._automation_result.blobs) == 1

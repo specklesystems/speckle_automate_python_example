@@ -13,10 +13,11 @@
       "justMyCode": true,
       "envFile": "${workspaceFolder}/.env",
       "args": [
+        "run",
         "{\"projectId\": \"843d07eb10\", \"modelId\": \"base design\", \"versionId\": \"2a32ccfee1\", \"speckleServerUrl\": \"https://latest.speckle.systems\"}",
         // make sure to use camelCase for variable names
-        "{\"speckleTypeToCount\": \"Objects.Geometry.Brep\"}"
-      ],
-    },
+        "{\"forbiddenSpeckleType\": \"Objects.Geometry.Brep\"}"
+      ]
+    }
   ]
 }
