@@ -1,8 +1,7 @@
 name: 'build and deploy Speckle functions'
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
     tags:
       - '*'
 
