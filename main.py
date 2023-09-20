@@ -21,11 +21,11 @@ class FunctionInputs(AutomateBase):
     ttps://docs.pydantic.dev/latest/usage/models/
     """
 
-    forbidden_speckle_types: list[str] = Field(
-        title="Forbidden speckle types",
+    forbidden_speckle_type: list[str] = Field(
+        title="Forbidden speckle type",
         description=(
-            "If a object has any of the following speckle_types,"
-            " it will be marked with an error"
+            "If a object has the following speckle_type,"
+            " it will be marked with an error."
         ),
     )
 
@@ -48,7 +48,7 @@ def automate_function(
 
     count = 0
     for b in flatten_base(version_root_object):
-        if b.speckle_type in function_inputs.forbidden_speckle_types:
+        if b.speckle_type == function_inputs.forbidden_speckle_type:
             if not b.id:
                 raise ValueError("Cannot operate on objects without their id's.")
             automate_context.add_object_error(
@@ -62,7 +62,7 @@ def automate_function(
         automate_context.mark_run_failed(
             "Automation failed: "
             f"Found {count} object that have one of the forbidden speckle types: "
-            f"{', '.join(function_inputs.forbidden_speckle_types)}"
+            f"{function_inputs.forbidden_speckle_type}"
         )
 
     else:
