@@ -18,7 +18,7 @@ class FunctionInputs(AutomateBase):
 
     Automate will make sure to supply them matching the types specified here.
     Please use the pydantic model schema to define your inputs:
-    ttps://docs.pydantic.dev/latest/usage/models/
+    https://docs.pydantic.dev/latest/usage/models/
     """
 
     forbidden_speckle_type: str = Field(

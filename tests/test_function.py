@@ -2,12 +2,10 @@
 import os
 import secrets
 import string
-from pathlib import Path
 
 import pytest
 from gql import gql
 from speckle_automate import (
-    AutomationContext,
     AutomationRunData,
     AutomationStatus,
     run_function,
