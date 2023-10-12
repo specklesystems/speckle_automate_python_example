@@ -51,9 +51,12 @@ def automate_function(
         if b.speckle_type == function_inputs.forbidden_speckle_type:
             if not b.id:
                 raise ValueError("Cannot operate on objects without their id's.")
-            automate_context.add_object_error(
-                b.id,
-                "This project should not contain the type: " f"{b.speckle_type}",
+
+            automate_context.attach_error_to_objects(
+                category="Forbidden speckle_type",
+                object_ids=b.id,
+                message="This project should not contain the type: "
+                f"{b.speckle_type}",
             )
             count += 1
 
