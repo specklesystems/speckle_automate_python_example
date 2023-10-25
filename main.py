@@ -3,6 +3,8 @@
 use the automation_context module to wrap your function in an Autamate context helper
 """
 
+import time
+
 from pydantic import Field
 from speckle_automate import (
     AutomateBase,
@@ -45,6 +47,11 @@ def automate_function(
     """
     # the context provides a conveniet way, to receive the triggering version
     version_root_object = automate_context.receive_version()
+
+    sleep_cycles = 10
+    for i in range(sleep_cycles):
+        print(f"sleeping {i}/{sleep_cycles}")
+        time.sleep(5)
 
     count = 0
     for b in flatten_base(version_root_object):
