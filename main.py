@@ -75,6 +75,10 @@ def automate_function(
             f"{function_inputs.forbidden_speckle_type}"
         )
 
+        # set the automation context view, to the original model / version view
+        # to show the offending objects
+        automate_context.set_context_view()
+
     else:
         automate_context.mark_run_success("No forbidden types found.")
 
