@@ -16,7 +16,7 @@ RUN pip install poetry
 # We set the working directory to be the root directory; all of our files will be copied here.
 WORKDIR /home/speckle
 
-# Copy all of our code and assets from the local directory into the root directory of the container.
+# Copy all of our code and assets from the local directory into the /home/speckle directory of the container.
 # We also ensure that the user 'speckle' owns these files, so it can access them
 # This assumes that the Dockerfile is in the same directory as the rest of the code
 COPY --chown=speckle:speckle . /home/speckle
