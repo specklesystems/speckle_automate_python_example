@@ -1,9 +1,7 @@
 """This module contains the business logic of the function.
 
-use the automation_context module to wrap your function in an Autamate context helper
+Use the automation_context module to wrap your function in an Autamate context helper
 """
-
-import time
 
 from pydantic import Field
 from speckle_automate import (
@@ -48,27 +46,22 @@ def automate_function(
     # the context provides a conveniet way, to receive the triggering version
     version_root_object = automate_context.receive_version()
 
-    sleep_cycles = 10
-    for i in range(sleep_cycles):
-        print(f"sleeping {i}/{sleep_cycles}")
-        time.sleep(5)
-
-    count = 0
-    for b in flatten_base(version_root_object):
-        if b.speckle_type == function_inputs.forbidden_speckle_type:
-            if not b.id:
-                raise ValueError("Cannot operate on objects without their id's.")
-
-            automate_context.attach_error_to_objects(
-                category="Forbidden speckle_type",
-                object_ids=b.id,
-                message="This project should not contain the type: "
-                f"{b.speckle_type}",
-            )
-            count += 1
+    objects_with_forbidden_speckle_type = [
+        b
+        for b in flatten_base(version_root_object)
+        if b.speckle_type == function_inputs.forbidden_speckle_type
+    ]
+    count = len(objects_with_forbidden_speckle_type)
 
     if count > 0:
         # this is how a run is marked with a failure cause
+        automate_context.attach_error_to_objects(
+            category="Forbidden speckle_type"
+            " ({function_inputs.forbidden_speckle_type})",
+            object_ids=[o.id for o in objects_with_forbidden_speckle_type if o.id],
+            message="This project should not contain the type: "
+            f"{function_inputs.forbidden_speckle_type}",
+        )
         automate_context.mark_run_failed(
             "Automation failed: "
             f"Found {count} object that have one of the forbidden speckle types: "
