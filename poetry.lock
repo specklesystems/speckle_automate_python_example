@@ -808,26 +808,24 @@ files = [
 
 [[package]]
 name = "specklepy"
-version = "2.17.14"
+version = "2.17.16"
 description = "The Python SDK for Speckle 2.0"
 optional = false
-python-versions = ">=3.8.0, <4.0"
-files = []
-develop = true
+python-versions = ">=3.8.0,<4.0"
+files = [
+    {file = "specklepy-2.17.16-py3-none-any.whl", hash = "sha256:d49c586e43e7619485bedd62a82701190f74a013aba186efb6f77b88ae44330f"},
+    {file = "specklepy-2.17.16.tar.gz", hash = "sha256:2a9c7cee9afd7aedeb1a95499b3c6914aea98897dd81b9b19cc53fb8e7cfd9e3"},
+]
 
 [package.dependencies]
-appdirs = "^1.4.4"
-attrs = "^23.1.0"
-Deprecated = "^1.2.13"
-gql = {version = "^3.3.0", extras = ["requests", "websockets"]}
-httpx = "^0.25.0"
-pydantic = "^2.0"
-stringcase = "^1.2.0"
-ujson = "^5.3.0"
-
-[package.source]
-type = "directory"
-url = "specklepy"
+appdirs = ">=1.4.4,<2.0.0"
+attrs = ">=23.1.0,<24.0.0"
+Deprecated = ">=1.2.13,<2.0.0"
+gql = {version = ">=3.3.0,<4.0.0", extras = ["requests", "websockets"]}
+httpx = ">=0.25.0,<0.26.0"
+pydantic = ">=2.0,<3.0"
+stringcase = ">=1.2.0,<2.0.0"
+ujson = ">=5.3.0,<6.0.0"
 
 [[package]]
 name = "stringcase"
@@ -1203,4 +1201,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "51e43a7220c9582ed5a69e6b7d921fedd93800c5538a04a909c9bde9658ed61e"
+content-hash = "09405d75be95b7a03c168c6b76f74085319973156fbda935bb7083944d05ccce"
