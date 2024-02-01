@@ -3,9 +3,12 @@ import os
 import secrets
 import string
 
+from specklepy.logging.exceptions import SpeckleException
+
 import pytest
 from gql import gql
 from speckle_automate import (
+    AutomationContext,
     AutomationRunData,
     AutomationStatus,
     run_function,
@@ -115,6 +118,8 @@ def automation_run_data(
         test_object, [ServerTransport(project_id, test_client)]
     )
     version_id = test_client.commit.create(project_id, root_obj_id)
+    if isinstance(version_id, SpeckleException):
+        raise version_id
 
     automation_name = crypto_random_string(10)
     automation_id = crypto_random_string(10)
@@ -142,17 +147,22 @@ def automation_run_data(
         automation_revision_id=automation_revision_id,
         automation_run_id=automation_run_id,
         function_id=function_id,
-        function_revision=function_revision,
+        function_name=crypto_random_string(10),
+        function_logo=None,
     )
 
 
 def test_function_run(automation_run_data: AutomationRunData, speckle_token: str):
     """Run an integration test for the automate function."""
+    automation_context = AutomationContext.initialize(
+        automation_run_data, speckle_token
+    )
     automate_sdk = run_function(
+        automation_context,
         automate_function,
-        automation_run_data,
-        speckle_token,
-        FunctionInputs(forbidden_speckle_type="Base"),
+        FunctionInputs(
+            forbidden_speckle_type="Base", whisper_message="testing automatically"
+        ),
     )
 
     assert automate_sdk.run_status == AutomationStatus.FAILED
