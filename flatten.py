@@ -7,7 +7,7 @@ from specklepy.objects import Base
 
 def flatten_base(base: Base) -> Iterable[Base]:
     """Take a base and flatten it to an iterable of bases."""
-    if hasattr(base, "elements"):
+    if hasattr(base, "elements") and base.elements is not None:
         for element in base["elements"]:
             yield from flatten_base(element)
     yield base
