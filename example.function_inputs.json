@@ -2,19 +2,19 @@
   "speckleToken": "YOUR SPEKCLE TOKEN",
   "functionInputs": {
     "whisperMessage": "you are doing something weird",
-    "forbiddenSpeckleType": ""
+    "forbiddenSpeckleType": "wall"
   },
   "automationRunData": {
     "project_id": "project id",
-    "model_id": "model id",
-    "branch_name": "branch name",
-    "version_id": "version id",
     "speckle_server_url": "https://latest.speckle.systems",
     "automation_id": "automation id",
-    "automation_revision_id": "automation revision id",
     "automation_run_id": "automation run id",
-    "function_id": "function id",
-    "function_name": "function name",
-    "function_logo": null
+    "function_run_id": "function run id",
+    "triggers": [
+      {
+        "payload": { "modelId": "model id", "versionId": "version id" },
+        "triggerType": "versionCreation"
+      }
+    ]
   }
 }
