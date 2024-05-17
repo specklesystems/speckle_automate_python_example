@@ -6,7 +6,7 @@
   "configurations": [
     {
       "name": "Speckle Automate function",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "program": "main.py",
       "console": "integratedTerminal",

@@ -1,8 +1,10 @@
 """Run integration tests with a speckle server."""
+
 import os
 import secrets
 import string
 
+from pydantic import SecretStr
 from specklepy.logging.exceptions import SpeckleException
 
 import pytest
@@ -136,7 +138,7 @@ def automation_run_data(
 
     automation_run_id = crypto_random_string(10)
     function_id = crypto_random_string(10)
-    function_revision = crypto_random_string(10)
+
     return AutomationRunData(
         project_id=project_id,
         model_id=model_id,
@@ -152,6 +154,9 @@ def automation_run_data(
     )
 
 
+@pytest.makr.skip(
+    "For now the new automate experience doesn't have an easy testing mechanism"
+)
 def test_function_run(automation_run_data: AutomationRunData, speckle_token: str):
     """Run an integration test for the automate function."""
     automation_context = AutomationContext.initialize(
@@ -161,7 +166,8 @@ def test_function_run(automation_run_data: AutomationRunData, speckle_token: str
         automation_context,
         automate_function,
         FunctionInputs(
-            forbidden_speckle_type="Base", whisper_message="testing automatically"
+            forbidden_speckle_type="Base",
+            whisper_message=SecretStr("testing automatically"),
         ),
     )
 
