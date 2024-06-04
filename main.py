@@ -59,7 +59,7 @@ def automate_function(
         # this is how a run is marked with a failure cause
         automate_context.attach_error_to_objects(
             category="Forbidden speckle_type"
-            " ({function_inputs.forbidden_speckle_type})",
+            f" ({function_inputs.forbidden_speckle_type})",
             object_ids=[o.id for o in objects_with_forbidden_speckle_type if o.id],
             message="This project should not contain the type: "
             f"{function_inputs.forbidden_speckle_type}",
