@@ -29,48 +29,6 @@ def crypto_random_string(length: int) -> str:
     return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
-def register_new_automation(
-    project_id: str,
-    model_id: str,
-    speckle_client: SpeckleClient,
-    automation_id: str,
-    automation_name: str,
-    automation_revision_id: str,
-):
-    """Register a new automation in the speckle server."""
-    query = gql(
-        """
-        mutation CreateAutomation(
-            $projectId: String! 
-            $modelId: String! 
-            $automationName: String!
-            $automationId: String! 
-            $automationRevisionId: String!
-        ) {
-                automationMutations {
-                    create(
-                        input: {
-                            projectId: $projectId
-                            modelId: $modelId
-                            automationName: $automationName 
-                            automationId: $automationId
-                            automationRevisionId: $automationRevisionId
-                        }
-                    )
-                }
-            }
-        """
-    )
-    params = {
-        "projectId": project_id,
-        "modelId": model_id,
-        "automationName": automation_name,
-        "automationId": automation_id,
-        "automationRevisionId": automation_revision_id,
-    }
-    speckle_client.httpclient.execute(query, params)
-
-
 @pytest.fixture()
 def speckle_token() -> str:
     """Provide a speckle token for the test suite."""
@@ -98,65 +56,64 @@ def test_client(speckle_server_url: str, speckle_token: str) -> SpeckleClient:
 
 
 @pytest.fixture()
-def test_object() -> Base:
-    """Create a Base model for testing."""
-    root_object = Base()
-    root_object.foo = "bar"
-    return root_object
-
-
-@pytest.fixture()
 def automation_run_data(
-    test_object: Base, test_client: SpeckleClient, speckle_server_url: str
+    test_client: SpeckleClient, speckle_server_url: str
 ) -> AutomationRunData:
-    """Set up an automation context for testing."""
-    project_id = test_client.stream.create("Automate function e2e test")
-    branch_name = "main"
-
-    model = test_client.branch.get(project_id, branch_name, commits_limit=1)
-    model_id: str = model.id
-
-    root_obj_id = operations.send(
-        test_object, [ServerTransport(project_id, test_client)]
+    """Create automation run"""
+    query = gql(
+        """
+        mutation CreateTestRun(
+            $projectId: ID!,
+            $automationId: ID!
+        ) {
+            projectMutations {
+                automationMutations(projectId: $projectId) {
+                    createTestAutomationRun(automationId: $automationId) {
+                        automationRunId
+                        functionRunId
+                        triggers {
+                            payload {
+                                modelId
+                                versionId
+                            }
+                            triggerType
+                        }
+                    }
+                }
+            }
+        }
+        """
     )
-    version_id = test_client.commit.create(project_id, root_obj_id)
-    if isinstance(version_id, SpeckleException):
-        raise version_id
 
-    automation_name = crypto_random_string(10)
-    automation_id = crypto_random_string(10)
-    automation_revision_id = crypto_random_string(10)
+    params = {
+        "automationId": os.getenv("SPECKLE_AUTOMATION_ID"),
+        "projectId": os.getenv("SPECKLE_PROJECT_ID")
+    }
 
-    register_new_automation(
-        project_id,
-        model_id,
-        test_client,
-        automation_id,
-        automation_name,
-        automation_revision_id,
-    )
+    result = test_client.httpclient.execute(query, params)
 
-    automation_run_id = crypto_random_string(10)
-    function_id = crypto_random_string(10)
+    automation_run_data = result.get("projectMutations").get("automationMutations").get("createTestAutomationRun")
+    trigger_data = automation_run_data.get("triggers")[0].get("payload")
 
+    """Use result to create automation run data"""
     return AutomationRunData(
-        project_id=project_id,
-        model_id=model_id,
-        branch_name=branch_name,
-        version_id=version_id,
+        project_id=os.getenv("SPECKLE_PROJECT_ID"),
         speckle_server_url=speckle_server_url,
-        automation_id=automation_id,
-        automation_revision_id=automation_revision_id,
-        automation_run_id=automation_run_id,
-        function_id=function_id,
-        function_name=crypto_random_string(10),
-        function_logo=None,
+        automation_id=os.getenv("SPECKLE_AUTOMATION_ID"),
+        automation_run_id=automation_run_data.get("automationRunId"),
+        function_run_id=automation_run_data.get("functionRunId"),
+        triggers=[
+            {
+                "trigger_type": "versionCreation",
+                "payload": {
+                    "model_id": trigger_data.get("modelId"),
+                    "version_id": trigger_data.get("versionId")
+                }
+            }
+        ]
     )
 
 
-@pytest.makr.skip(
-    "For now the new automate experience doesn't have an easy testing mechanism"
-)
 def test_function_run(automation_run_data: AutomationRunData, speckle_token: str):
     """Run an integration test for the automate function."""
     automation_context = AutomationContext.initialize(
@@ -166,9 +123,9 @@ def test_function_run(automation_run_data: AutomationRunData, speckle_token: str
         automation_context,
         automate_function,
         FunctionInputs(
-            forbidden_speckle_type="Base",
+            forbidden_speckle_type="None",
             whisper_message=SecretStr("testing automatically"),
         ),
     )
 
-    assert automate_sdk.run_status == AutomationStatus.FAILED
+    assert automate_sdk.run_status == AutomationStatus.SUCCEEDED
