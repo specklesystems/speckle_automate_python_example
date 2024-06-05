@@ -48,7 +48,7 @@ def speckle_token(env) -> str:
     """Provide a speckle token for the test suite."""
     token = env.get("token")
     if not token:
-        raise ValueError(f"Cannot run tests without a {env_var} environment variable")
+        raise ValueError(f"Cannot run tests without a SPECKLE_TOKEN environment variable")
     return token
 
 
