@@ -4,7 +4,8 @@ import os
 import secrets
 import string
 
-from pydantic import SecretStr
+from pydantic import Field, SecretStr, BaseModel
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from specklepy.logging.exceptions import SpeckleException
 
 import pytest
@@ -23,26 +24,38 @@ from specklepy.transports.server import ServerTransport
 from main import FunctionInputs, automate_function
 
 
-def crypto_random_string(length: int) -> str:
-    """Generate a semi crypto random string of a given length."""
-    alphabet = string.ascii_letters + string.digits
-    return "".join(secrets.choice(alphabet) for _ in range(length))
+class TestEnvironment(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        env_prefix="speckle_",
+        extra="ignore"
+    )
+
+    token: str = Field()
+    server_url: str = Field()
+    project_id: str = Field()
+    automation_id: str = Field()
 
 
 @pytest.fixture()
-def speckle_token() -> str:
+def env() -> TestEnvironment:
+    return TestEnvironment().model_dump()
+
+
+@pytest.fixture()
+def speckle_token(env) -> str:
     """Provide a speckle token for the test suite."""
-    env_var = "SPECKLE_TOKEN"
-    token = os.getenv(env_var)
+    token = env.get("token")
     if not token:
         raise ValueError(f"Cannot run tests without a {env_var} environment variable")
     return token
 
 
 @pytest.fixture()
-def speckle_server_url() -> str:
+def speckle_server_url(env) -> str:
     """Provide a speckle server url for the test suite, default to localhost."""
-    return os.getenv("SPECKLE_SERVER_URL", "http://127.0.0.1:3000")
+    return env.get("server_url", "http://127.0.0.1:3000")
 
 
 @pytest.fixture()
@@ -57,8 +70,12 @@ def test_client(speckle_server_url: str, speckle_token: str) -> SpeckleClient:
 
 @pytest.fixture()
 def automation_run_data(
-    test_client: SpeckleClient, speckle_server_url: str
+    env: TestEnvironment, test_client: SpeckleClient, speckle_server_url: str
 ) -> AutomationRunData:
+    """Extract environment variables"""
+    automation_id = env.get("automation_id")
+    project_id = env.get("project_id")
+
     """Create automation run"""
     query = gql(
         """
@@ -86,8 +103,8 @@ def automation_run_data(
     )
 
     params = {
-        "automationId": os.getenv("SPECKLE_AUTOMATION_ID"),
-        "projectId": os.getenv("SPECKLE_PROJECT_ID")
+        "automationId": automation_id,
+        "projectId": project_id
     }
 
     result = test_client.httpclient.execute(query, params)
@@ -97,9 +114,9 @@ def automation_run_data(
 
     """Use result to create automation run data"""
     return AutomationRunData(
-        project_id=os.getenv("SPECKLE_PROJECT_ID"),
+        project_id=project_id,
         speckle_server_url=speckle_server_url,
-        automation_id=os.getenv("SPECKLE_AUTOMATION_ID"),
+        automation_id=automation_id,
         automation_run_id=automation_run_data.get("automationRunId"),
         function_run_id=automation_run_data.get("functionRunId"),
         triggers=[
