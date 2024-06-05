@@ -110,7 +110,6 @@ def automation_run_data(
     result = test_client.httpclient.execute(query, params)
 
     automation_run_data = result.get("projectMutations").get("automationMutations").get("createTestAutomationRun")
-    trigger_data = automation_run_data.get("triggers")[0].get("payload")
 
     """Use result to create automation run data"""
     return AutomationRunData(
@@ -119,15 +118,7 @@ def automation_run_data(
         automation_id=automation_id,
         automation_run_id=automation_run_data.get("automationRunId"),
         function_run_id=automation_run_data.get("functionRunId"),
-        triggers=[
-            {
-                "trigger_type": "versionCreation",
-                "payload": {
-                    "model_id": trigger_data.get("modelId"),
-                    "version_id": trigger_data.get("versionId")
-                }
-            }
-        ]
+        triggers=automation_run_data.get("triggers")
     )
 
 
