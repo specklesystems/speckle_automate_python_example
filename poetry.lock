@@ -709,13 +709,13 @@ typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
 name = "pydantic-settings"
-version = "2.3.0"
+version = "2.3.1"
 description = "Settings management using Pydantic"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "pydantic_settings-2.3.0-py3-none-any.whl", hash = "sha256:26eeed27370a9c5e3f64e4a7d6602573cbedf05ed940f1d5b11c3f178427af7a"},
-    {file = "pydantic_settings-2.3.0.tar.gz", hash = "sha256:78db28855a71503cfe47f39500a1dece523c640afd5280edb5c5c9c9cfa534c9"},
+    {file = "pydantic_settings-2.3.1-py3-none-any.whl", hash = "sha256:acb2c213140dfff9669f4fe9f8180d43914f51626db28ab2db7308a576cce51a"},
+    {file = "pydantic_settings-2.3.1.tar.gz", hash = "sha256:e34bbd649803a6bb3e2f0f58fb0edff1f0c7f556849fda106cc21bcce12c30ab"},
 ]
 
 [package.dependencies]
@@ -834,24 +834,26 @@ files = [
 
 [[package]]
 name = "specklepy"
-version = "2.19.2"
+version = "2.17.14"
 description = "The Python SDK for Speckle 2.0"
 optional = false
-python-versions = "<4.0,>=3.8.0"
-files = [
-    {file = "specklepy-2.19.2-py3-none-any.whl", hash = "sha256:d8e0eb2d2f0cff0c687f8ad808af14db622e506eadd80fed7987488bae2caf9c"},
-    {file = "specklepy-2.19.2.tar.gz", hash = "sha256:9b27e2e788cc73754a461d5ac08fc3efc3dfe460e9760aed3e34429f01b36812"},
-]
+python-versions = ">=3.8.0, <4.0"
+files = []
+develop = true
 
 [package.dependencies]
-appdirs = ">=1.4.4,<2.0.0"
-attrs = ">=23.1.0,<24.0.0"
-Deprecated = ">=1.2.13,<2.0.0"
-gql = {version = ">=3.3.0,<4.0.0", extras = ["requests", "websockets"]}
-httpx = ">=0.25.0,<0.26.0"
-pydantic = ">=2.5,<3.0"
-stringcase = ">=1.2.0,<2.0.0"
-ujson = ">=5.3.0,<6.0.0"
+appdirs = "^1.4.4"
+attrs = "^23.1.0"
+Deprecated = "^1.2.13"
+gql = {version = "^3.3.0", extras = ["requests", "websockets"]}
+httpx = "^0.25.0"
+pydantic = "^2.5"
+stringcase = "^1.2.0"
+ujson = "^5.3.0"
+
+[package.source]
+type = "directory"
+url = "../specklepy"
 
 [[package]]
 name = "stringcase"
@@ -1242,4 +1244,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "f07d704fba64dfbb35b0b69abf99715e25ee0af4ef6cce9adde6a67e374bf434"
+content-hash = "58f9aa20410ffb9586eec0d4fdb0dff0e38290914e82c5db6e8fb206dd9564f4"
