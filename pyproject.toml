@@ -4,10 +4,11 @@ version = "0.1.0"
 description = "Example function for Speckle Automate using specklepy"
 authors = ["Gergő Jedlicska <gergo@jedlicska.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.11"
-specklepy = "^2.19.6"
+specklepy = "^2.21.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
