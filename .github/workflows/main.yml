@@ -11,7 +11,7 @@ jobs:
       FUNCTION_SCHEMA_FILE_NAME: functionSchema.json
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.7
+      - uses: actions/checkout@v4.2.2
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
