@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 # We install poetry to generate a list of dependencies which will be required by our application
-RUN pip install poetry
+RUN pip install poetry==1.8.4
 
 # We set the working directory to be the /home/speckle directory; all of our files will be copied here.
 WORKDIR /home/speckle
