@@ -26,7 +26,10 @@ jobs:
       - name: Extract functionInputSchema
         id: extract_schema
         run: |
-          python main.py generate_schema ${HOME}/${{ env.FUNCTION_SCHEMA_FILE_NAME }}
+          python main.py generate_schema "${HOME}/${{ env.FUNCTION_SCHEMA_FILE_NAME }}"
+          echo "Checking if functionSchema.json exists after generation..."
+          ls -lah "${HOME}/${{ env.FUNCTION_SCHEMA_FILE_NAME }}"
+
       - name: Speckle Automate Function - Build and Publish
         uses: specklesystems/speckle-automate-github-composite-action@0.8.1
         with:
