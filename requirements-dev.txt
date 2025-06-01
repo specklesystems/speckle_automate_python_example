@@ -1,0 +1,16 @@
+# Development dependencies for Speckle Automate Python function
+# Include production dependencies
+-r requirements.txt
+
+# Code formatting and linting
+black==23.12.1
+ruff==0.0.271
+
+# Type checking
+mypy==1.13.0
+
+# Testing
+pytest==7.4.4
+
+# Settings management for development
+pydantic-settings==2.6.1

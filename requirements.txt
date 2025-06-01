@@ -1,0 +1,2 @@
+# Production dependencies for Speckle Automate Python function
+specklepy==2.21.4
