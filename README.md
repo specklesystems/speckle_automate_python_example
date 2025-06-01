@@ -13,31 +13,38 @@ It also has some sane defaults for development environment setups.
 
 ### Add new dependencies
 
-To add new Python package dependencies to the project you can use the command line:
+To add new Python package dependencies to the project, edit the `pyproject.toml` file:
 
 **For packages your function needs to run** (like pandas, requests, etc.):
-```bash
-echo "pandas==2.1.0" >> requirements.txt
+```toml
+dependencies = [
+    "specklepy==2.21.4",
+    "pandas==2.1.0",  # Add production dependencies here
+]
 ```
 
 **For development tools** (like testing or formatting tools):
-```bash
-echo "pytest-mock==3.11.1" >> requirements-dev.txt
+```toml
+[project.optional-dependencies]
+dev = [
+    "black==23.12.1",
+    "pytest-mock==3.11.1",  # Add development dependencies here
+    # ... other dev tools
+]
 ```
-Alternatively, the `.txt` file can be edited manually.
 
-**How to decide which file?**
-- If your `main.py` (or other function logic) imports it → `requirements.txt` 
-- If it's just a tool to help you code → `requirements-dev.txt`
+**How to decide which section?**
+- If your `main.py` (or other function logic) imports it → `dependencies`
+- If it's just a tool to help you code → `[project.optional-dependencies].dev`
 
 Example:
 ```python
 # In your main.py
-import pandas as pd  # ← This goes in requirements.txt
-import specklepy     # ← This goes in requirements.txt
+import pandas as pd  # ← This goes in dependencies
+import specklepy     # ← This goes in dependencies
 
 # You won't import these in main.py:
-# pytest, black, mypy ← These go in requirements-dev.txt
+# pytest, black, mypy ← These go in [project.optional-dependencies].dev
 ```
 
 ### Change launch variables
@@ -76,16 +83,16 @@ Create a new repo from this template, and use the create new code.
     source .venv/bin/activate
     
     pip install --upgrade pip
-    pip install -r requirements-dev.txt
+    pip install .[dev]
     ```
 
 **What this installs:**
-- All the packages your function needs to run (`requirements.txt`)
-- Plus development tools like testing and code formatting (`requirements-dev.txt`)
+- All the packages your function needs to run (`dependencies`)
+- Plus development tools like testing and code formatting (`[project.optional-dependencies].dev`)
 
-**Why two files?**
-- `requirements.txt`: Only what gets deployed with your function (lightweight)
-- `requirements-dev.txt`: Extra tools to help you write better code locally
+**Why separate sections?**
+- `dependencies`: Only what gets deployed with your function (lightweight)
+- `dev` dependencies: Extra tools to help you write better code locally
 
 ## Building and Testing
 
@@ -93,36 +100,30 @@ The code can be tested locally by running `pytest`.
 
 ### Alternative dependency managers
 
-While this template uses pip and requirements.txt for simplicity and compatibility, you can use other dependency managers locally:
+This template uses the modern **PEP 621** standard in `pyproject.toml`, which works with all modern Python dependency managers:
 
 #### Using Poetry
 ```bash
-poetry init
-poetry add specklepy
-poetry add --group dev pytest black mypy ruff pydantic-settings
-poetry install
+poetry install  # Automatically reads pyproject.toml
 ```
 
 #### Using uv
 ```bash
-uv venv
-uv pip install -r requirements-dev.txt
-```
-
-**Keep requirements.txt in sync:**
-```bash
-uv pip compile pyproject.toml -o requirements.txt
-uv pip compile pyproject.toml --extra=dev -o requirements-dev.txt
+uv sync  # Automatically reads pyproject.toml
 ```
 
 #### Using pip-tools
 ```bash
-pip install pip-tools
-pip-compile requirements.in  # Create requirements.txt from requirements.in
-pip-compile requirements-dev.in  # Create requirements-dev.txt from requirements-dev.in
+pip-compile pyproject.toml  # Generate requirements.txt from pyproject.toml
+pip install -r requirements.txt
 ```
 
-**Important:** Regardless of which tool you use locally, the CI/CD pipeline and Docker builds will use pip and requirements.txt, so make sure to keep your requirements files updated when you add or change dependencies.
+#### Using pdm
+```bash
+pdm install  # Automatically reads pyproject.toml
+```
+
+**Advantage**: All tools read the same `pyproject.toml` file, so there's no need to keep multiple files in sync!
 
 ### Building and running the Docker Container Image
 
