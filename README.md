@@ -14,11 +14,30 @@ Register the function
 
 ### Add new dependencies
 
-To add new Python package dependencies to the project, add them to `requirements.txt` for production dependencies or `requirements-dev.txt` for development dependencies.
+To add new Python package dependencies to the project:
 
-For example, to add pandas:
+**For packages your function needs to run** (like pandas, requests, etc.):
 ```bash
 echo "pandas==2.1.0" >> requirements.txt
+```
+
+**For development tools** (like testing or formatting tools):
+```bash
+echo "pytest-mock==3.11.1" >> requirements-dev.txt
+```
+
+**How to decide which file?**
+- If your `main.py` imports it → `requirements.txt` 
+- If it's just a tool to help you code → `requirements-dev.txt`
+
+Example:
+```python
+# In your main.py
+import pandas as pd  # ← This goes in requirements.txt
+import specklepy     # ← This goes in requirements.txt
+
+# You won't import these in main.py:
+# pytest, black, mypy ← These go in requirements-dev.txt
 ```
 
 ### Change launch variables
@@ -59,6 +78,14 @@ Create a new repo from this template, and use the create new code.
     pip install --upgrade pip
     pip install -r requirements-dev.txt
     ```
+
+**What this installs:**
+- All the packages your function needs to run (`requirements.txt`)
+- Plus development tools like testing and code formatting (`requirements-dev.txt`)
+
+**Why two files?**
+- `requirements.txt`: Only what gets deployed with your function (lightweight)
+- `requirements-dev.txt`: Extra tools to help you write better code locally
 
 ## Building and Testing
 

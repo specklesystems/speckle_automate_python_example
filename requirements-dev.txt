@@ -1,15 +1,18 @@
-# Development dependencies for Speckle Automate Python function
-# Include production dependencies
+# Development dependencies - tools you use while coding, but your function doesn't need to run
+# These help you write better code: testing, formatting, type checking, etc.
+# Only installed on your local machine, NOT in production
+
+# Include all production dependencies too
 -r requirements.txt
 
-# Code formatting and linting
+# Code formatting and linting tools
 black==23.12.1
 ruff==0.0.271
 
-# Type checking
+# Type checking (catches errors before running)
 mypy==1.13.0
 
-# Testing
+# Testing framework
 pytest==7.4.4
 
 # Settings management for development
