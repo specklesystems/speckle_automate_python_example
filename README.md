@@ -9,12 +9,11 @@ It also has some sane defaults for development environment setups.
 ## Getting started
 
 1. Use this template repository to create a new repository in your own / organization's profile.
-
-Register the function 
+2. Register the function 
 
 ### Add new dependencies
 
-To add new Python package dependencies to the project:
+To add new Python package dependencies to the project you can use the command line:
 
 **For packages your function needs to run** (like pandas, requests, etc.):
 ```bash
@@ -25,9 +24,10 @@ echo "pandas==2.1.0" >> requirements.txt
 ```bash
 echo "pytest-mock==3.11.1" >> requirements-dev.txt
 ```
+Alternatively, the `.txt` file can be edited manually.
 
 **How to decide which file?**
-- If your `main.py` imports it → `requirements.txt` 
+- If your `main.py` (or other function logic) imports it → `requirements.txt` 
 - If it's just a tool to help you code → `requirements-dev.txt`
 
 Example:
