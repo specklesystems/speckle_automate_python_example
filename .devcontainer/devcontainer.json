@@ -19,7 +19,7 @@
   // "forwardPorts": [],
 
   // Use 'postCreateCommand' to run commands after the container is created.
-  "postCreateCommand": "cp .env.example .env && python -m venv .venv && . .venv/bin/activate && pip install --upgrade pip && pip install -r requirements-dev.txt",
+  "postCreateCommand": "cp .env.example .env && python -m venv .venv && . .venv/bin/activate && pip install --upgrade pip && pip install .[dev]",
 
   // Configure tool-specific properties.
   "customizations": {

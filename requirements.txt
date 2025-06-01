@@ -1,5 +1,0 @@
-# Production dependencies - packages your function needs to actually run
-# Only add packages here that your main.py imports and uses
-# These get installed when your function is deployed to Speckle Automate
-
-specklepy==2.21.4
