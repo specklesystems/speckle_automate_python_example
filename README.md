@@ -14,14 +14,18 @@ Register the function
 
 ### Add new dependencies
 
-To add new Python package dependencies to the project, use the following:
-`$ poetry add pandas`
+To add new Python package dependencies to the project, add them to `requirements.txt` for production dependencies or `requirements-dev.txt` for development dependencies.
+
+For example, to add pandas:
+```bash
+echo "pandas==2.1.0" >> requirements.txt
+```
 
 ### Change launch variables
 
 Describe how the launch.json should be edited.
 
-### Github Codespaces
+### GitHub Codespaces
 
 Create a new repo from this template, and use the create new code.
 
@@ -43,13 +47,42 @@ Create a new repo from this template, and use the create new code.
 ## Developer Requirements
 
 1. Install the following:
-    - [Python 3](https://www.python.org/downloads/)
-    - [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
-1. Run `poetry shell && poetry install` to install the required Python packages.
+    - [Python 3.11+](https://www.python.org/downloads/)
+1. Run the following to set up your development environment:
+    ```bash
+    python -m venv .venv
+    # On Windows
+    .venv\Scripts\activate
+    # On macOS/Linux
+    source .venv/bin/activate
+    
+    pip install --upgrade pip
+    pip install -r requirements-dev.txt
+    ```
 
 ## Building and Testing
 
-The code can be tested locally by running `poetry run pytest`.
+The code can be tested locally by running `pytest`.
+
+### Alternative dependency managers
+
+While this template uses pip and requirements.txt for simplicity and compatibility, you can use other dependency managers locally:
+
+#### Using Poetry
+```bash
+poetry init
+poetry add specklepy
+poetry add --group dev pytest black mypy ruff pydantic-settings
+poetry install
+```
+
+#### Using uv
+```bash
+uv venv
+uv pip install -r requirements-dev.txt
+```
+
+**Note:** Regardless of which tool you use locally, the CI/CD pipeline and Docker builds will use pip and requirements.txt, so make sure to keep your requirements files updated.
 
 ### Building and running the Docker Container Image
 
