@@ -109,7 +109,20 @@ uv venv
 uv pip install -r requirements-dev.txt
 ```
 
-**Note:** Regardless of which tool you use locally, the CI/CD pipeline and Docker builds will use pip and requirements.txt, so make sure to keep your requirements files updated.
+**Keep requirements.txt in sync:**
+```bash
+uv pip compile pyproject.toml -o requirements.txt
+uv pip compile pyproject.toml --extra=dev -o requirements-dev.txt
+```
+
+#### Using pip-tools
+```bash
+pip install pip-tools
+pip-compile requirements.in  # Create requirements.txt from requirements.in
+pip-compile requirements-dev.in  # Create requirements-dev.txt from requirements-dev.in
+```
+
+**Important:** Regardless of which tool you use locally, the CI/CD pipeline and Docker builds will use pip and requirements.txt, so make sure to keep your requirements files updated when you add or change dependencies.
 
 ### Building and running the Docker Container Image
 
