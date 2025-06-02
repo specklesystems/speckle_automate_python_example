@@ -8,17 +8,9 @@ description = "A Speckle Automate function template using specklepy"
 readme = "README.md"
 license = "Apache-2.0"
 keywords = ["speckle", "automate", "bim", "aec"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "License :: OSI Approved :: Apache Software License",
-    "Operating System :: OS Independent",
-]
 
 dependencies = [
-    "specklepy==2.21.4"
+    "specklepy==3.0.0"
 ]
 
 [project.optional-dependencies]
