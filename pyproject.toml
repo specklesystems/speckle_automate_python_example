@@ -1,26 +1,26 @@
-[tool.poetry]
-name = "speckle-automate-py"
+[project]
+name = "speckle-automate-function"
 version = "0.1.0"
-description = "Example function for Speckle Automate using specklepy"
-authors = ["Gergő Jedlicska <gergo@jedlicska.com>"]
+requires-python = ">=3.11"
+authors = [{ name = "Speckle Systems", email = "hello@speckle.systems" }]
+maintainers = [{ name = "Speckle Systems", email = "hello@speckle.systems" }]
+description = "A Speckle Automate function template using specklepy"
 readme = "README.md"
-package-mode = false
+license = "Apache-2.0"
+keywords = ["speckle", "automate", "bim", "aec"]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-specklepy = "^2.21.4"
+dependencies = [
+    "specklepy==3.0.0"
+]
 
-[tool.poetry.group.dev.dependencies]
-black = "^23.3.0"
-mypy = "^1.3.0"
-ruff = "^0.0.271"
-pydantic-settings = "^2.3.0"
-pytest = "^7.4.2"
-# specklepy = { path = "../specklepy", develop = true }
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[project.optional-dependencies]
+dev = [
+    "black==23.12.1",
+    "mypy==1.13.0",
+    "pytest==7.4.4",
+    "ruff==0.0.271",
+    "pydantic-settings==2.6.1",
+]
 
 [tool.ruff]
 select = [
