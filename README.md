@@ -9,19 +9,49 @@ It also has some sane defaults for development environment setups.
 ## Getting started
 
 1. Use this template repository to create a new repository in your own / organization's profile.
-
-Register the function 
+1. Register the function
 
 ### Add new dependencies
 
-To add new Python package dependencies to the project, use the following:
-`$ poetry add pandas`
+To add new Python package dependencies to the project, edit the `pyproject.toml` file:
+
+**For packages your function needs to run** (like pandas, requests, etc.):
+```toml
+dependencies = [
+    "specklepy==3.0.0",
+    "pandas==2.1.0",  # Add production dependencies here
+]
+```
+
+**For development tools** (like testing or formatting tools):
+```toml
+[project.optional-dependencies]
+dev = [
+    "black==23.12.1",
+    "pytest-mock==3.11.1",  # Add development dependencies here
+    # ... other dev tools
+]
+```
+
+**How to decide which section?**
+- If your `main.py` (or other function logic) imports it → `dependencies`
+- If it's just a tool to help you code → `[project.optional-dependencies].dev`
+
+Example:
+```python
+# In your main.py
+import pandas as pd  # ← This goes in dependencies
+import specklepy     # ← This goes in dependencies
+
+# You won't import these in main.py:
+# pytest, black, mypy ← These go in [project.optional-dependencies].dev
+```
 
 ### Change launch variables
 
 Describe how the launch.json should be edited.
 
-### Github Codespaces
+### GitHub Codespaces
 
 Create a new repo from this template, and use the create new code.
 
@@ -43,13 +73,57 @@ Create a new repo from this template, and use the create new code.
 ## Developer Requirements
 
 1. Install the following:
-    - [Python 3](https://www.python.org/downloads/)
-    - [Poetry](https://python-poetry.org/docs/#installing-with-the-official-installer)
-1. Run `poetry shell && poetry install` to install the required Python packages.
+    - [Python 3.11+](https://www.python.org/downloads/)
+1. Run the following to set up your development environment:
+    ```bash
+    python -m venv .venv
+    # On Windows
+    .venv\Scripts\activate
+    # On macOS/Linux
+    source .venv/bin/activate
+
+    pip install --upgrade pip
+    pip install .[dev]
+    ```
+
+**What this installs:**
+- All the packages your function needs to run (`dependencies`)
+- Plus development tools like testing and code formatting (`[project.optional-dependencies].dev`)
+
+**Why separate sections?**
+- `dependencies`: Only what gets deployed with your function (lightweight)
+- `dev` dependencies: Extra tools to help you write better code locally
 
 ## Building and Testing
 
-The code can be tested locally by running `poetry run pytest`.
+The code can be tested locally by running `pytest`.
+
+### Alternative dependency managers
+
+This template uses the modern **PEP 621** standard in `pyproject.toml`, which works with all modern Python dependency managers:
+
+#### Using Poetry
+```bash
+poetry install  # Automatically reads pyproject.toml
+```
+
+#### Using uv
+```bash
+uv sync  # Automatically reads pyproject.toml
+```
+
+#### Using pip-tools
+```bash
+pip-compile pyproject.toml  # Generate requirements.txt from pyproject.toml
+pip install -r requirements.txt
+```
+
+#### Using pdm
+```bash
+pdm install  # Automatically reads pyproject.toml
+```
+
+**Advantage**: All tools read the same `pyproject.toml` file, so there's no need to keep multiple files in sync!
 
 ### Building and running the Docker Container Image
 
