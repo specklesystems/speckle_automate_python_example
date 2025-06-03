@@ -9,7 +9,7 @@ It also has some sane defaults for development environment setups.
 ## Getting started
 
 1. Use this template repository to create a new repository in your own / organization's profile.
-2. Register the function 
+1. Register the function
 
 ### Add new dependencies
 
@@ -18,7 +18,7 @@ To add new Python package dependencies to the project, edit the `pyproject.toml`
 **For packages your function needs to run** (like pandas, requests, etc.):
 ```toml
 dependencies = [
-    "specklepy==2.21.4",
+    "specklepy==3.0.0",
     "pandas==2.1.0",  # Add production dependencies here
 ]
 ```
@@ -81,7 +81,7 @@ Create a new repo from this template, and use the create new code.
     .venv\Scripts\activate
     # On macOS/Linux
     source .venv/bin/activate
-    
+
     pip install --upgrade pip
     pip install .[dev]
     ```

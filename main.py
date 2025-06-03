@@ -42,7 +42,7 @@ def automate_function(
         automate_context: A context-helper object that carries relevant information
             about the runtime context of this function.
             It gives access to the Speckle project data that triggered this run.
-            It also has convenient methods for attaching result data to the Speckle model.
+            It also has convenient methods for attaching results to the Speckle model.
         function_inputs: An instance object matching the defined schema.
     """
     # The context provides a convenient way to receive the triggering version.
@@ -60,7 +60,7 @@ def automate_function(
         automate_context.attach_error_to_objects(
             category="Forbidden speckle_type"
             f" ({function_inputs.forbidden_speckle_type})",
-            object_ids=[o.id for o in objects_with_forbidden_speckle_type if o.id],
+            affected_objects=objects_with_forbidden_speckle_type,
             message="This project should not contain the type: "
             f"{function_inputs.forbidden_speckle_type}",
         )
