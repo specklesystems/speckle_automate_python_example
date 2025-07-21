@@ -9,7 +9,7 @@ readme = "README.md"
 license = "Apache-2.0"
 keywords = ["speckle", "automate", "bim", "aec"]
 
-dependencies = ["specklepy==3.0.0"]
+dependencies = ["specklepy==3.0.2"]
 
 [project.optional-dependencies]
 dev = [
