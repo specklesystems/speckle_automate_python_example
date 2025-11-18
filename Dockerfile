@@ -1,5 +1,5 @@
 # We use the official Python 3.11 image as our base image and will add our code to it. For more details, see https://hub.docker.com/_/python
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 # We set the working directory to be the /home/speckle directory; all of our files will be copied here.
 WORKDIR /home/speckle
