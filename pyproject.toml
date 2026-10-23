@@ -1,7 +1,7 @@
 [project]
 name = "speckle-automate-function"
 version = "0.1.0"
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 authors = [{ name = "Speckle Systems", email = "hello@speckle.systems" }]
 maintainers = [{ name = "Speckle Systems", email = "hello@speckle.systems" }]
 description = "A Speckle Automate function template using specklepy"
@@ -9,13 +9,13 @@ readme = "README.md"
 license = "Apache-2.0"
 keywords = ["speckle", "automate", "bim", "aec"]
 
-dependencies = ["specklepy==3.0.0"]
+dependencies = ["specklepy==3.2.4"]
 
 [project.optional-dependencies]
 dev = [
-    "mypy==1.13.0",
-    "pytest==7.4.4",
-    "ruff==0.11.12",
+    "mypy==1.19.1",
+    "pytest==8.3.4",
+    "ruff==0.16.3"
 ]
 
 [tool.ruff]
