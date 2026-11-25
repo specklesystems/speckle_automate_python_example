@@ -4,6 +4,14 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    # The pins of specklesystems/.github move together, after the cooldown that
+    # only speckle-next skips (ADR-0002 amendment of 2026-11-24).
+    groups:
+      dot-github:
+        patterns:
+          - "specklesystems/.github/*"
+    cooldown:
+      default-days: 7
   - package-ecosystem: "pip"
     directory: "/"
     schedule:
